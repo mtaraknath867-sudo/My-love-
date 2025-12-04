@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ভালোবাসার গল্প - তিতলি ও আমি</title>
+    <!-- ফন্ট লোড -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;600;800&family=Dancing+Script:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- আইকন -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* বেসিক সেটআপ */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Baloo Da 2', cursive;
+            background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+            color: #d63384;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ইমোজি বৃষ্টি */
+        .heart-rain {
+            position: fixed;
+            top: -10vh;
+            font-size: 1.5rem;
+            animation: fall linear forwards;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        /* ১. ওয়েলকাম স্ক্রিন */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ff9a9e 0%, #fecfef 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s;
+        }
+
+        .enter-btn {
+            padding: 15px 45px;
+            font-size: 1.5rem;
+            background: #fff;
+            color: #ff0055;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Baloo Da 2', cursive;
+            box-shadow: 0 10px 25px rgba(255, 0, 85, 0.3);
+            animation: pulse 1.5s infinite;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ২. মেইন কন্টেন্ট */
+        .main-wrapper {
+            display: none;
+            /* শুরুতে লুকানো */
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* কার্ড ডিজাইন */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            margin-bottom: 30px;
+            border: 3px solid #fff;
+            position: relative;
+        }
+
+        /* শিরোনাম এবং নাম */
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #ff0055;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .name-highlight {
+            font-size: 2rem;
+            color: #d63384;
+            font-weight: 800;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-badge {
+            background: #ff0055;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* লাভ লেটার */
+        .love-letter {
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            background: #fff0f5;
+            border: 2px dashed #ff6b81;
+            padding: 20px;
+            border-radius: 15px;
+            color: #444;
+        }
+
+        .love-letter b {
+            color: #ff0055;
+        }
+
+        /* টাইমার */
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .time-box {
+            background: linear-gradient(45deg, #ff0055, #ff4757);
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            min-width: 55px;
+        }
+
+        .time-box span {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .time-box small {
+            font-size: 0.75rem;
+        }
+
+        /* ফটো স্লাইডার */
+        .photo-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            transform: scale(1.05);
+        }
+
+        .photo-slide.active {
+            opacity: 1;
+            transform: scale(1);
+            transition: 1s;
+        }
+
+        .photo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ভিডিও প্লেয়ার */
+        .video-section-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            background: #ff0055;
+            padding: 5px 20px;
+            border-radius: 50px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 75vh;
+            background: #000;
+            border-radius: 20px;
+            border: 4px solid #fff;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ভিডিও কন্ট্রোলস */
+        .controls {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .vid-btn {
+            pointer-events: auto;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: white;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 20;
+        }
+
+        .vid-btn:hover {
+            background: #ff0055;
+            border-color: #ff0055;
+        }
+
+        .prev-vid {
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+        }
+
+        .next-vid {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+
+        .sound-btn {
+            top: 15px;
+            right: 15px;
+            width: auto;
+            padding: 0 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .vid-counter {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ১. ওয়েলকাম স্ক্রিন -->
+    <div id="welcome-screen">
+        <h1 style="margin-bottom: 10px;">প্রিয় তিতলি ❤️</h1>
+        <p style="color: #444; margin-bottom: 20px;">তোমার জন্য ছোট্ট একটা সারপ্রাইজ...</p>
+        <button class="enter-btn" onclick="startJourney()">ক্লিক করো 🎁</button>
+    </div>
+
+    <!-- ২. মেইন কন্টেন্ট -->
+    <div class="main-wrapper" id="main-content">
+
+        <div class="card">
+            <h1>Happy Anniversary</h1>
+            <div class="name-highlight">তিতলি ভান্ডারী</div>
+            <div class="date-badge">শুরু: ৫ই জুলাই ২০২৪</div>
+
+            <!-- টাইমার -->
+            <div class="timer" id="timer"></div>
+
+            <!-- লাভ লেটার -->
+            <div class="love-letter">
+                প্রিয় <b>তিতলি</b>,<br>
+                আজ আমাদের সম্পর্কের এই সুন্দর পথচলা ১ বছর ৫ মাস পূর্ণ করে এগিয়ে চলেছে। ৫ই জুলাই ২০২৪—এই তারিখটা আমার জীবনের সবচেয়ে লাকি দিন, কারণ এই দিনেই আমি আমার জীবনের সেরা উপহারটা পেয়েছিলাম—<b>তোমাকে</b>।<br><br>
+                তিতলি, তুমি শুধু আমার প্রেমিকা নও, তুমি আমার বেস্ট ফ্রেন্ড, আমার সুখের পৃথিবী। তোমার ওই মিষ্টি হাসি আর মায়াভরা চোখের দিকে তাকালে আমি সব কষ্ট ভুলে যাই।<br><br>
+                সারাজীবন এভাবেই আমার হাতটা শক্ত করে ধরে থেকো। আমি তোমাকে কথা দিচ্ছি, জীবনের শেষ দিন পর্যন্ত তোমাকে এভাবেই ভালোবাসবো।<br><br>
+                <b>অনেক ভালোবাসি তোমায়, আমার তিতলি! ❤️</b>
+            </div>
+        </div>
+
+        <!-- ফটো স্লাইডার (অটোমেটিক) -->
+        <div class="card" style="padding: 10px;">
+            <div class="photo-container">
+                <div class="photo-slide active"><img src="photo1.jpg" onerror="this.src='https://placehold.co/600x400/ffbdc9/white?text=Add+photo1.jpg'"></div>
+                <div class="photo-slide"><img src="photo2.jpg" onerror="this.src='https://placehold.co/600x400/ffbdc9/white?text=Add+photo2.jpg'"></div>
+                <div class="photo-slide"><img src="photo3.jpg" onerror="this.src='https://placehold.co/600x400/ffbdc9/white?text=Add+photo3.jpg'"></div>
+                <div class="photo-slide"><img src="photo4.jpg" onerror="this.src='https://placehold.co/600x400/ffbdc9/white?text=Add+photo4.jpg'"></div>
+            </div>
+        </div>
+
+        <!-- ভিডিও সেকশন (স্মার্ট প্লেয়ার) -->
+        <div class="video-section-header">আমাদের মধুর স্মৃতি (ভিডিও) 🎥</div>
+
+        <div class="video-wrapper">
+            <!-- মেইন ভিডিও প্লেয়ার -->
+            <video id="mainVideo" playsinline poster="photo1.jpg">
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+
+            <!-- কন্ট্রোলস -->
+            <div class="vid-counter" id="vidCount">1 / 10</div>
+
+            <div class="controls">
+                <!-- সাউন্ড -->
+                <button class="vid-btn sound-btn" onclick="toggleMute()">
+                    <i class="fas fa-volume-up" id="soundIcon"></i> &nbsp; Sound
+                </button>
+
+                <!-- নেক্সট/প্রিভিয়াস -->
+                <button class="vid-btn prev-vid" onclick="changeVideo(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="vid-btn next-vid" onclick="changeVideo(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Forever Yours &mdash; ❤️
+        </div>
+        <br><br>
+    </div>
+
+    <script>
+        // --- ১. ভিডিও লিস্ট কনফিগারেশন ---
+        // আপনার ১০টি ভিডিওর নাম এখানে থাকবে
+        const videoList = [
+            "video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4",
+            "video6.mp4", "video7.mp4", "video8.mp4", "video9.mp4", "video10.mp4"
+        ];
+
+        let currentVideoIdx = 0;
+        const videoElement = document.getElementById('mainVideo');
+        const counterElement = document.getElementById('vidCount');
+        const soundIcon = document.getElementById('soundIcon');
+        let isMuted = false;
+
+        // ভিডিও চেঞ্জ ও প্লে ফাংশন
+        function loadAndPlayVideo(index) {
+            if (index < 0) currentVideoIdx = videoList.length - 1;
+            else if (index >= videoList.length) currentVideoIdx = 0;
+            else currentVideoIdx = index;
+
+            videoElement.src = videoList[currentVideoIdx];
+            videoElement.muted = isMuted; // আগের সাউন্ড সেটিং মনে রাখবে
+
+            videoElement.play().catch(e => console.log("Waiting for interaction"));
+            counterElement.innerText = (currentVideoIdx + 1) + " / " + videoList.length;
+        }
+
+        // বাটন কন্ট্রোল
+        function changeVideo(n) {
+            loadAndPlayVideo(currentVideoIdx + n);
+        }
+
+        // সাউন্ড কন্ট্রোল
+        function toggleMute() {
+            videoElement.muted = !videoElement.muted;
+            isMuted = videoElement.muted;
+            soundIcon.className = isMuted ? "fas fa-volume-mute" : "fas fa-volume-up";
+        }
+
+        // অটো স্লাইড: ভিডিও শেষ হলে পরেরটা
+        videoElement.onended = function() {
+            changeVideo(1);
+        };
+
+
+        // --- ২. স্টার্ট জার্নি (ক্লিক করলে সব শুরু হবে) ---
+        function startJourney() {
+            const welcome = document.getElementById('welcome-screen');
+            welcome.style.opacity = '0';
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+
+                // প্রথম ভিডিও প্লে, সাউন্ড অন করার চেষ্টা
+                videoElement.muted = false;
+                isMuted = false;
+                loadAndPlayVideo(0);
+            }, 600);
+        }
+
+        // --- ৩. টাইমার (৫ জুলাই ২০২৪ থেকে) ---
+        const startDate = new Date("July 5, 2024 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const gap = now - startDate;
+            const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((gap % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = `
+                <div class="time-box"><span>${days}</span><small>দিন</small></div>
+                <div class="time-box"><span>${hours}</span><small>ঘণ্টা</small></div>
+                <div class="time-box"><span>${minutes}</span><small>মিনিট</small></div>
+                <div class="time-box"><span>${seconds}</span><small>সেকেন্ড</small></div>`;
+        }, 1000);
+
+        // --- ৪. ফটো স্লাইডার (অটোমেটিক) ---
+        let pIdx = 0;
+        const pSlides = document.querySelectorAll('.photo-slide');
+        setInterval(() => {
+            pSlides[pIdx].classList.remove('active');
+            pIdx = (pIdx + 1) % pSlides.length;
+            pSlides[pIdx].classList.add('active');
+        }, 3500); // ৩.৫ সেকেন্ড পর পর
+
+        // --- ৫. ইমোজি বৃষ্টি ---
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-rain');
+            heart.innerText = ['❤️', '🦋', '🌸', '✨', '💑'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            heart.style.fontSize = Math.random() * 20 + 15 + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, 300);
+    </script>
+</body>
+
+</html>
